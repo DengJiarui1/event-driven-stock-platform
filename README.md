@@ -1,19 +1,98 @@
 # 基于事件驱动的股票短期价格波动数据分析平台
 
-一个面向毕业设计的股票短期波动分析与预测平台。项目结合股票历史行情数据与外部事件信息，对股价短期波动进行分析、预测、回测与可视化展示，形成“数据处理 + 模型训练 + 接口服务 + 前端展示”的完整系统。
-
 ## 项目简介
 
-传统股价预测大多依赖历史价格、成交量和技术指标等结构化数据，但在实际市场中，新闻、公告、政策变化等事件信息往往会对股票短期波动产生明显影响。  
-本项目围绕“事件驱动”思想，构建了一个集数据采集、数据处理、事件分析、模型预测、结果对比和前端可视化于一体的分析平台。
+本项目围绕“股票短期价格波动预测”展开，结合股票历史行情数据与新闻/公告事件信息，构建了一个集 **数据处理、事件构建、模型训练、真实推理、前后端可视化展示** 于一体的分析平台。
 
-平台主要实现以下目标：
+项目以贵州茅台（600519）为实验对象，完成了以下核心工作：
 
-- 对股票历史行情数据进行清洗与特征构建
-- 融合事件信息进行事件窗口分析
-- 使用深度学习模型进行短期价格波动预测
-- 对不同模型效果进行对比分析
-- 通过 React 前端进行结果展示与交互
+- 股票历史数据采集与缓存
+- 事件表构建与事件窗口生成
+- 无信息泄露特征工程
+- 传统机器学习基线模型训练与对比
+- 基于 PyTorch 的事件驱动 LSTM 模型训练与真实推理
+- 基于 Informer 的单变量收益率预测扩展实验
+- FastAPI 后端接口封装
+- React + Vite 前端可视化展示
+
+当前系统已经实现从 **数据处理 → 模型训练 → 结果保存 → 后端服务 → 前端页面展示** 的完整闭环。
+
+---
+
+## 项目特色
+
+- **事件驱动建模**：不仅使用历史价格序列，还结合公告/新闻事件构建事件窗口特征。
+- **多模型对比**：支持 Logistic Regression、SVM、Random Forest、LSTM、Informer 等模型实验。
+- **真实预测接口**：前端可调用后端真实 LSTM 模型，对历史事件进行推理并回看真实结果。
+- **Informer 扩展实验**：工程化接入 Informer，支持任务提交、状态轮询、指标读取与预测图展示。
+- **可视化平台实现**：前端已实现首页、事件分析、预测结果、模型对比、Informer 实验等页面。
+
+---
+
+## 主要功能
+
+### 1. 数据处理与特征工程
+- 股票历史数据获取与本地缓存
+- 新闻/公告事件表构建
+- 事件日期与交易日自动对齐
+- 事件窗口生成
+- 无信息泄露特征工程
+- LSTM 输入序列构造与标准化
+
+### 2. 模型训练与实验
+- Logistic Regression 基线实验
+- SVM 基线实验
+- Random Forest 基线实验
+- 事件驱动 LSTM 模型训练与保存
+- Informer 单变量收益率预测扩展实验
+
+### 3. 后端接口
+- 事件列表接口
+- 事件窗口接口
+- 模型对比接口
+- 最新预测接口
+- 真实预测接口
+- Informer 实验任务接口
+
+### 4. 前端页面
+- 首页仪表盘
+- 事件分析页
+- 预测结果页
+- 模型对比页
+- Informer 实验页
+
+---
+
+## 项目结构
+
+```text
+event-driven-stock-platform/
+├─ Informer2020/              # Informer 官方工程与扩展实验代码
+├─ artifacts/                 # 模型、报告、Informer 实验结果等产物
+├─ backend/
+│  └─ app/
+│     ├─ main.py              # FastAPI 后端入口
+│     └─ services/            # LSTM / Informer / 预测等服务逻辑
+├─ data/
+│  ├─ raw/                    # 原始数据
+│  ├─ interim/                # 中间结果（events、event_windows 等）
+│  └─ processed/              # Informer 等模型使用的处理后数据
+├─ docs/                      # 文档说明
+├─ frontend/                  # React + Vite 前端
+│  ├─ src/
+│  ├─ public/
+│  └─ package.json
+├─ notebooks/                 # 实验与分析记录
+├─ scripts/                   # 辅助脚本
+├─ src/                       # 数据处理、特征工程、模型训练主代码
+├─ requirements-core.txt
+├─ requirements-lstm.txt
+├─ requirements.txt
+├─ run_pipeline.py            # 数据处理主流程入口
+└─ README.md
+```
+
+---
 
 ## 技术栈
 
@@ -22,188 +101,253 @@
 - FastAPI
 - Pandas
 - NumPy
+- scikit-learn
 - PyTorch
+- joblib
+- matplotlib
 
 ### 前端
 - React
 - Vite
-- ECharts / Recharts（按你项目实际使用为准）
 - Axios
+- ECharts
 - React Router
 
-### 模型与分析
-- LSTM
-- Informer
-- 时间序列特征工程
-- 事件窗口分析
-- 模型效果对比
+### 模型与实验
+- Logistic Regression
+- SVM
+- Random Forest
+- LSTM（事件驱动）
+- Informer（收益率单变量扩展实验）
 
-## 项目功能
+---
 
-- 首页展示项目背景、研究意义与系统简介
-- 事件分析页展示事件类型、事件窗口及价格变化
-- 预测结果页展示模型预测值与真实值对比
-- 模型对比页展示不同模型评估指标
-- 后端接口读取处理后的 CSV 数据并提供给前端调用
-- 支持数据处理、模型训练、预测输出与结果可视化
-
-## 项目结构
-
-```text
-event-driven-stock-platform/
-├─ data/
-│  ├─ raw/                  # 原始数据
-│  ├─ processed/            # 处理后数据
-│  └─ results/              # 预测结果、对比结果等
-├─ src/
-│  ├─ data/                 # 数据采集与预处理
-│  ├─ features/             # 特征工程
-│  ├─ models/               # 模型定义
-│  ├─ training/             # 模型训练
-│  └─ evaluation/           # 评估与分析
-├─ frontend/                # React 前端
-│  ├─ src/
-│  ├─ public/
-│  └─ package.json
-├─ app/
-│  └─ main.py               # FastAPI 入口（按实际文件名调整）
-├─ run_pipeline.py          # 数据处理主流程
-├─ main_informer.py         # Informer 模型训练/预测入口
-├─ requirements-core.txt
-├─ requirements-lstm.txt
-└─ README.md
-运行环境
+## 运行环境
 
 建议环境如下：
 
-Python 3.10 / 3.11
+- Python 3.10 / 3.11
+- Node.js 18+
+- npm 9+
+- Windows 10 / 11
 
-Node.js 18+
+---
 
-npm 9+
+## 安装与运行
 
-Windows 10/11
+### 1. 克隆项目
 
-安装与运行
-1. 克隆项目
+```bash
 git clone https://github.com/DengJiarui1/event-driven-stock-platform.git
 cd event-driven-stock-platform
-2. 创建 Python 虚拟环境
+```
+
+### 2. 创建并激活 Python 虚拟环境
+
+```bash
 python -m venv .venv
+```
 
-Windows 激活：
+Windows 下激活：
 
+```powershell
 .venv\Scripts\activate
-3. 安装后端依赖
-pip install --upgrade pip setuptools wheel
-pip install -r requirements-core.txt
-pip install -r requirements-lstm.txt
-4. 运行数据处理流程
+```
+
+### 3. 安装依赖
+
+```bash
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -r requirements-core.txt
+python -m pip install -r requirements-lstm.txt
+```
+
+---
+
+## 数据处理主流程
+
+运行：
+
+```bash
 python run_pipeline.py
-5. 启动模型训练或预测
+```
 
-例如运行 Informer：
+该命令会依次完成：
 
-python main_informer.py --model informer --data custom --features S --target return --root_path data/processed --data_path informer_600519.csv --seq_len 60 --label_len 30 --pred_len 5 --enc_in 1 --dec_in 1 --c_out 1 --itr 1 --train_epochs 10
+- 股票数据读取/抓取
+- 事件表生成
+- 事件窗口生成
+- 特征工程构建
+- LSTM 数据准备与标准化
+- Baseline 模型训练
+- LSTM 模型训练
+- 模型对比结果保存
 
-注：命令参数可根据实际数据文件和实验设置调整。
+常见输出文件包括：
 
-6. 启动 FastAPI 后端
+- `data/interim/events.csv`
+- `data/interim/event_windows.csv`
+- `artifacts/models/lstm_scaler.pkl`
+- `artifacts/models/event_lstm_torch.pt`
+- `artifacts/reports/model_comparison.csv`
 
-如果你的后端入口文件是 app/main.py：
+---
 
-uvicorn app.main:app --reload
+## 启动后端
 
-如果你的入口文件名不同，请按实际路径修改。
+当前 FastAPI 后端入口为：
 
-启动后默认访问：
+```bash
+python -m uvicorn backend.app.main:app --reload --port 8000
+```
 
-http://127.0.0.1:8000
+启动后访问：
 
-接口文档：
+- 后端服务地址：`http://127.0.0.1:8000`
+- 接口文档：`http://127.0.0.1:8000/docs`
 
-http://127.0.0.1:8000/docs
-7. 启动 React 前端
+---
+
+## 启动前端
+
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
-启动后默认访问：
+启动后访问：
 
-http://localhost:5173
-主要数据说明
+- 前端地址：`http://localhost:5173`
 
-项目中涉及的数据主要包括：
+---
 
-股票历史行情数据
+## Informer 扩展实验（可选）
 
-事件数据（如新闻、公告、政策类事件）
+Informer 官方工程位于 `Informer2020/` 目录下。  
+当前项目已经支持通过前端 **Informer实验** 页面与后端接口进行工程化调用。
 
-模型预测结果数据
+如需手动运行，可参考：
 
-模型对比结果数据
+```bash
+python Informer2020/main_informer.py \
+  --model informer \
+  --data custom \
+  --features S \
+  --target return \
+  --root_path data/processed \
+  --data_path informer_600519.csv \
+  --seq_len 60 \
+  --label_len 30 \
+  --pred_len 5 \
+  --enc_in 1 \
+  --dec_in 1 \
+  --c_out 1 \
+  --itr 1 \
+  --train_epochs 6
+```
 
-常见结果文件包括：
+说明：
 
-events.csv
+- 当前 Informer 实验主要用于 **单变量收益率预测扩展实验**
+- 其定位是 **对比实验与研究补充**，不替代事件驱动 LSTM 主流程
 
-model_comparison.csv
+---
 
-event_windows.csv
+## 系统页面说明
 
-预测结果相关 CSV 文件
+### 1. 首页仪表盘
+展示平台概览、事件统计、最优分类模型、最新预测结果及系统结论说明。
 
-这些数据由后端接口读取后提供给前端展示。
+### 2. 事件分析页
+支持选择事件日期，联动展示：
+- 事件信息
+- 事件窗口内价格走势
+- 成交量变化
+- 关键统计指标
+- 事件窗口明细表
 
-系统页面说明
-1. 首页
+### 3. 预测结果页
+支持选择历史事件，调用真实 LSTM 模型进行推理，并展示：
+- 预测方向
+- 预测概率
+- 预测置信度
+- 真实值回看
+- 特征序列输入
 
-展示课题背景、平台简介、研究意义和系统主要功能。
+### 4. 模型对比页
+将模型结果分为两部分展示：
 
-2. 事件分析页
+- **分类模型对比**：Logistic Regression、SVM、Random Forest、LSTM
+- **时序回归模型对比**：Informer
 
-支持查看不同事件类型对股价短期变化的影响，并通过事件窗口展示事件前后价格波动情况。
+避免将 Accuracy 与 MAE/MSE/RMSE 等不同指标混在同一图表中。
 
-3. 预测结果页
+### 5. Informer 实验页
+支持：
+- 提交 Informer 实验任务
+- 查看任务状态
+- 查看误差指标
+- 查看预测图
+- 查看结果预览
 
-展示模型预测值与真实值对比，反映模型对短期价格波动的预测能力。
+---
 
-4. 模型对比页
+## 当前实验结论
 
-展示 LSTM、Informer 等模型在 MAE、RMSE、方向准确率等指标上的效果差异。
+### 分类模型结论
+在当前小样本事件驱动分类任务中，简单模型表现更稳定。  
+从现有实验结果看，Logistic Regression 在 Accuracy 上表现较优，说明在事件样本规模有限的条件下，传统机器学习方法仍具有较强可用性。
 
-项目亮点
+### LSTM 结论
+事件驱动 LSTM 能够利用事件窗口内的时序特征完成真实推理，并已经成功接入系统前后端。  
+在当前数据规模下，其表现未明显超过最优简单模型，但其优势在于可扩展为更丰富的事件驱动特征融合框架。
 
-将事件信息引入股票短期波动分析
+### Informer 结论
+Informer 在仅使用历史收益率作为单变量输入时，预测结果整体更平滑，对股票短期剧烈波动的刻画能力有限。  
+这说明单纯依赖价格时序信息不足以支撑短期波动预测，引入公告/新闻等事件信息具有必要性。
 
-结合时间序列建模与事件驱动思想
+---
 
-前后端分离，具有完整平台形态
+## 推荐体验流程
 
-支持预测、分析、对比与可视化展示
+建议按以下顺序体验项目：
 
-适合作为本科毕业设计项目
+1. 运行 `python run_pipeline.py`
+2. 启动 FastAPI 后端
+3. 启动 React 前端
+4. 打开前端页面依次查看：
+   - 首页仪表盘
+   - 事件分析页
+   - 预测结果页
+   - 模型对比页
+   - Informer 实验页
 
-后续可扩展方向
+---
 
-引入更多事件文本特征，如情感分数、关键词权重
+## 注意事项
 
-增加更多预测模型，如 Transformer、GRU、XGBoost
+- 当前“真实预测”主要针对历史事件库中的已有事件进行推理与回看。
+- Informer 模块当前作为扩展实验模块使用。
+- 如果重新创建虚拟环境，请重新安装依赖。
+- 若 Informer 官方代码在新环境下运行报错，需注意旧版 NumPy 接口兼容性问题，例如 `np.Inf` 应修改为 `np.inf`。
 
-增加用户登录、个股切换、结果导出等功能
+---
 
-引入量化回测模块，提升系统完整性
+## 后续可扩展方向
 
-增强前端交互与图表联动效果
+- 支持新事件模拟预测
+- 引入事件文本情感特征
+- 支持多股票切换
+- 增加回测模块
+- 增加实验记录持久化
+- 增加结果导出与实验报告下载
 
-说明
+---
 
-本项目为毕业设计实践项目，主要用于研究“事件驱动”方法在股票短期价格波动分析与预测中的应用价值。
-部分数据与模型结果会根据实验设置、时间范围和参数不同而有所变化。
-
-作者
+## 项目作者
 
 邓家瑞
 
-仓库地址
-https://github.com/DengJiarui1/event-driven-stock-platform
+本科毕业设计项目：  
+**基于事件驱动的股票短期价格波动数据分析平台**
