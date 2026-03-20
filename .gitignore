@@ -1,0 +1,40 @@
+﻿# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+.pytest_cache/
+
+# FastAPI / general
+.env
+.env.*
+*.sqlite3
+
+# Model / checkpoints
+checkpoints/
+weights/
+*.pth
+*.pt
+*.ckpt
+
+# Data
+data/raw/
+data/intermediate/
+data/cache/
+*.csv.tmp
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

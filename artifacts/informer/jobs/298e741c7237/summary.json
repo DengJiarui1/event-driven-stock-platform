@@ -1,0 +1,68 @@
+{
+  "job_id": "298e741c7237",
+  "status": "success",
+  "created_at": "2026-03-20 17:43:46",
+  "finished_at": "2026-03-20 17:44:04",
+  "input_csv": "data/processed/informer_600519.csv",
+  "result_dir": "Informer2020/results/informer_custom_ftS_sl60_ll30_pl5_dm128_nh4_el2_dl1_df256_atprob_fc5_ebtimeF_dtTrue_mxTrue_maotai_return_only_0",
+  "chart_url": "/static/informer/jobs/298e741c7237/prediction_compare.png",
+  "metrics": {
+    "mae": 0.38943570852279663,
+    "mse": 0.37334147095680237,
+    "rmse": 0.6110167503356934,
+    "mape": 1.7717483043670654,
+    "mspe": 35.753822326660156
+  },
+  "metrics_raw": [
+    0.38943570852279663,
+    0.37334147095680237,
+    0.6110167503356934,
+    1.7717483043670654,
+    35.753822326660156
+  ],
+  "pred_shape": [
+    384,
+    5,
+    1
+  ],
+  "true_shape": [
+    384,
+    5,
+    1
+  ],
+  "preview": {
+    "pred_head": [
+      -0.08846056461334229,
+      -0.04495328664779663,
+      -0.12852542102336884,
+      -0.11688745021820068,
+      -0.09222236275672913
+    ],
+    "true_head": [
+      -0.06562826782464981,
+      -0.27828726172447205,
+      0.29524439573287964,
+      -0.2810797393321991,
+      -0.15689514577388763
+    ]
+  },
+  "config": {
+    "data_path": "data/processed/informer_600519.csv",
+    "target": "return",
+    "seq_len": 60,
+    "label_len": 30,
+    "pred_len": 5,
+    "train_epochs": 6,
+    "batch_size": 16,
+    "patience": 3,
+    "learning_rate": 0.0001,
+    "d_model": 128,
+    "n_heads": 4,
+    "e_layers": 2,
+    "d_layers": 1,
+    "d_ff": 256,
+    "dropout": 0.05,
+    "run_name": "maotai_return_only",
+    "created_at": "2026-03-20 17:43:46"
+  }
+}

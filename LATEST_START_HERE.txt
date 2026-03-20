@@ -1,0 +1,6 @@
+这是全新重建版项目：
+1. 先运行 scripts/recreate_env.ps1
+2. 如你旧项目里已有 stock_price_600519.csv，请复制到 data/raw/
+3. 确认 data/raw/news_events_600519.csv 存在
+4. 运行 scripts/verify_env.ps1
+5. 运行 scripts/run_pipeline.ps1
