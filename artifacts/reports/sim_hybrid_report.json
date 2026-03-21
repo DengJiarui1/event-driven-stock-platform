@@ -1,0 +1,56 @@
+{
+  "model_name": "Hybrid LSTM (Pre-event Simulation)",
+  "task_type": "pre_event_simulation_classification",
+  "train_rows": 62,
+  "val_rows": 10,
+  "test_rows": 18,
+  "metrics": {
+    "accuracy": 0.5555555555555556,
+    "precision": 0.5294117647058824,
+    "recall": 1.0,
+    "f1": 0.6923076923076923
+  },
+  "confusion_matrix": [
+    [
+      1,
+      8
+    ],
+    [
+      0,
+      9
+    ]
+  ],
+  "class_labels": {
+    "negative_class": 0,
+    "positive_class": 1,
+    "negative_label_text": "下跌",
+    "positive_label_text": "上涨",
+    "matrix_layout": "[[TN, FP], [FN, TP]]"
+  },
+  "classification_report_text": "              precision    recall  f1-score   support\n\n           0       1.00      0.11      0.20         9\n           1       0.53      1.00      0.69         9\n\n    accuracy                           0.56        18\n   macro avg       0.76      0.56      0.45        18\nweighted avg       0.76      0.56      0.45        18\n",
+  "seq_feature_columns": [
+    [
+      "t_minus_2_intraday_return",
+      "t_minus_2_amplitude",
+      "t_minus_2_volume_change_vs_prev",
+      "t_minus_2_close_change_vs_prev_close"
+    ],
+    [
+      "t_minus_1_intraday_return",
+      "t_minus_1_amplitude",
+      "t_minus_1_volume_change_vs_prev",
+      "t_minus_1_close_change_vs_prev_close"
+    ]
+  ],
+  "static_feature_columns": [
+    "event_type",
+    "title_length",
+    "positive_keyword_count",
+    "negative_keyword_count",
+    "sentiment_score",
+    "is_report",
+    "is_dividend",
+    "is_governance",
+    "is_manual_source"
+  ]
+}

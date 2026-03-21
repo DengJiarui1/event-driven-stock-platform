@@ -1,0 +1,42 @@
+{
+  "model_name": "Simulation V1 (Pre-event Logistic Regression)",
+  "task_type": "pre_event_simulation_classification",
+  "train_rows": 72,
+  "test_rows": 18,
+  "metrics": {
+    "accuracy": 0.5,
+    "precision": 0.5,
+    "recall": 0.6666666666666666,
+    "f1": 0.5714285714285715
+  },
+  "confusion_matrix": [
+    [
+      3,
+      6
+    ],
+    [
+      3,
+      6
+    ]
+  ],
+  "classification_report_text": "              precision    recall  f1-score   support\n\n           0       0.50      0.33      0.40         9\n           1       0.50      0.67      0.57         9\n\n    accuracy                           0.50        18\n   macro avg       0.50      0.50      0.49        18\nweighted avg       0.50      0.50      0.49        18\n",
+  "feature_columns": [
+    "t_minus_2_intraday_return",
+    "t_minus_2_amplitude",
+    "t_minus_2_volume_change_vs_prev",
+    "t_minus_2_close_change_vs_prev_close",
+    "t_minus_1_intraday_return",
+    "t_minus_1_amplitude",
+    "t_minus_1_volume_change_vs_prev",
+    "t_minus_1_close_change_vs_prev_close",
+    "event_type",
+    "title_length",
+    "positive_keyword_count",
+    "negative_keyword_count",
+    "sentiment_score",
+    "is_report",
+    "is_dividend",
+    "is_governance",
+    "is_manual_source"
+  ]
+}

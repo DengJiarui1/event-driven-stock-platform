@@ -1,0 +1,55 @@
+{
+  "model_name": "Hybrid LSTM (Pre-event Simulation)",
+  "task_type": "pre_event_simulation_classification",
+  "seq_feature_columns": [
+    [
+      "t_minus_2_intraday_return",
+      "t_minus_2_amplitude",
+      "t_minus_2_volume_change_vs_prev",
+      "t_minus_2_close_change_vs_prev_close"
+    ],
+    [
+      "t_minus_1_intraday_return",
+      "t_minus_1_amplitude",
+      "t_minus_1_volume_change_vs_prev",
+      "t_minus_1_close_change_vs_prev_close"
+    ]
+  ],
+  "static_feature_columns": [
+    "event_type",
+    "title_length",
+    "positive_keyword_count",
+    "negative_keyword_count",
+    "sentiment_score",
+    "is_report",
+    "is_dividend",
+    "is_governance",
+    "is_manual_source"
+  ],
+  "train_rows": 62,
+  "val_rows": 10,
+  "test_rows": 18,
+  "split_method": "time_order_70_10_20",
+  "model_config": {
+    "seq_input_size": 4,
+    "static_input_size": 9,
+    "hidden_size": 32,
+    "static_hidden_size": 16,
+    "fusion_hidden_size": 32,
+    "dropout": 0.1
+  },
+  "train_config": {
+    "batch_size": 16,
+    "epochs": 80,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "patience": 10,
+    "device": "cuda"
+  },
+  "metrics": {
+    "accuracy": 0.5555555555555556,
+    "precision": 0.5294117647058824,
+    "recall": 1.0,
+    "f1": 0.6923076923076923
+  }
+}

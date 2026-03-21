@@ -1,0 +1,31 @@
+{
+  "model_name": "Simulation V1 (Pre-event Logistic Regression)",
+  "feature_columns": [
+    "t_minus_2_intraday_return",
+    "t_minus_2_amplitude",
+    "t_minus_2_volume_change_vs_prev",
+    "t_minus_2_close_change_vs_prev_close",
+    "t_minus_1_intraday_return",
+    "t_minus_1_amplitude",
+    "t_minus_1_volume_change_vs_prev",
+    "t_minus_1_close_change_vs_prev_close",
+    "event_type",
+    "title_length",
+    "positive_keyword_count",
+    "negative_keyword_count",
+    "sentiment_score",
+    "is_report",
+    "is_dividend",
+    "is_governance",
+    "is_manual_source"
+  ],
+  "train_rows": 72,
+  "test_rows": 18,
+  "split_method": "time_order_80_20",
+  "metrics": {
+    "accuracy": 0.5,
+    "precision": 0.5,
+    "recall": 0.6666666666666666,
+    "f1": 0.5714285714285715
+  }
+}
