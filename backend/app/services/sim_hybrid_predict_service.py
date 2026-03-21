@@ -23,6 +23,7 @@ MODEL_PATH = ROOT_DIR / "artifacts" / "models" / "sim_hybrid_lstm.pt"
 SEQ_SCALER_PATH = ROOT_DIR / "artifacts" / "models" / "sim_hybrid_seq_scaler.pkl"
 STATIC_SCALER_PATH = ROOT_DIR / "artifacts" / "models" / "sim_hybrid_static_scaler.pkl"
 META_PATH = ROOT_DIR / "artifacts" / "models" / "sim_hybrid_meta.json"
+REPORT_PATH = ROOT_DIR / "artifacts" / "reports" / "sim_hybrid_report.json"
 
 
 class HybridEventLSTM(nn.Module):
@@ -77,6 +78,13 @@ def load_meta() -> dict[str, Any]:
 
 
 @lru_cache(maxsize=1)
+def load_report() -> dict[str, Any]:
+    if not REPORT_PATH.exists():
+        return {}
+    return json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+
+
+@lru_cache(maxsize=1)
 def load_seq_scaler():
     if not SEQ_SCALER_PATH.exists():
         raise FileNotFoundError(
@@ -117,6 +125,34 @@ def load_hybrid_model() -> HybridEventLSTM:
     model.load_state_dict(state_dict)
     model.eval()
     return model
+
+
+def get_best_threshold() -> float:
+    """
+    在线推理优先使用训练评估阶段保存下来的最佳阈值。
+    优先级：
+    1. sim_hybrid_report.json 顶层 best_threshold
+    2. sim_hybrid_meta.json -> threshold_config.best_threshold
+    3. 默认 0.50
+    """
+    report = load_report()
+    report_threshold = report.get("best_threshold")
+    if report_threshold is not None:
+        try:
+            return float(report_threshold)
+        except (TypeError, ValueError):
+            pass
+
+    meta = load_meta()
+    threshold_cfg = meta.get("threshold_config", {})
+    meta_threshold = threshold_cfg.get("best_threshold")
+    if meta_threshold is not None:
+        try:
+            return float(meta_threshold)
+        except (TypeError, ValueError):
+            pass
+
+    return 0.50
 
 
 def build_seq_array_from_context(context: dict[str, Any]) -> np.ndarray:
@@ -162,6 +198,7 @@ def predict_new_event_simulation_hybrid(
     seq_scaler = load_seq_scaler()
     static_scaler = load_static_scaler()
     model = load_hybrid_model()
+    best_threshold = get_best_threshold()
 
     text_features = build_title_features(event_title, event_type, event_source)
 
@@ -182,8 +219,11 @@ def predict_new_event_simulation_hybrid(
         logits = model(seq_tensor, static_tensor)
         prob = float(torch.sigmoid(logits).item())
 
-    label = "上涨" if prob >= 0.5 else "下跌"
+    prediction_label = "上涨" if prob >= best_threshold else "下跌"
+
+    # 保留常规置信度，同时补一个“相对阈值”的决策边际
     confidence = max(prob, 1 - prob)
+    decision_margin = prob - best_threshold
 
     result = {
         "simulation_mode": "pre_event_hybrid_lstm",
@@ -193,12 +233,14 @@ def predict_new_event_simulation_hybrid(
         "event_source": event_source,
         "event_title": event_title,
         "model_name": meta.get("model_name", "Hybrid LSTM (Pre-event Simulation)"),
-        "prediction_label": label,
+        "prediction_label": prediction_label,
         "probability": round(prob, 4),
         "confidence": round(confidence, 4),
+        "decision_threshold": round(float(best_threshold), 4),
+        "decision_margin": round(float(decision_margin), 4),
         "context_dates": context["context_dates"],
         "market_sequence": context["market_sequence"],
         "text_features": text_features,
-        "note": "该结果为事件发生前模拟预测，不包含事件日及未来信息；当前模型为 Hybrid LSTM（时序特征 + 静态特征融合）。",
+        "note": "该结果为事件发生前模拟预测，不包含事件日及未来信息；当前模型为 Hybrid LSTM（时序特征 + 静态特征融合），并使用训练评估阶段选出的最佳阈值进行在线判定。",
     }
     return sanitize_for_json(result)

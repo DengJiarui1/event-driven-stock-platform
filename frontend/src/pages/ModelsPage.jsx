@@ -27,6 +27,12 @@ function formatProb(value) {
   return `${(num * 100).toFixed(2)}%`
 }
 
+function formatPlainNumber(value, digits = 4) {
+  const num = Number(value)
+  if (Number.isNaN(num)) return '--'
+  return num.toFixed(digits)
+}
+
 function formatSigned(value, digits = 2) {
   const num = Number(value)
   if (Number.isNaN(num)) return '--'
@@ -476,6 +482,16 @@ export default function ModelsPage() {
                 value={simHybridReport?.metrics?.f1 != null ? formatPercent(simHybridReport.metrics.f1) : '--'}
                 extra="分类综合指标"
               />
+              <KpiCard
+                title="最佳阈值"
+                value={simHybridReport?.best_threshold != null ? formatPlainNumber(simHybridReport.best_threshold, 2) : '--'}
+                extra="验证集阈值扫描"
+              />
+              <KpiCard
+                title="pos_weight"
+                value={simHybridReport?.pos_weight != null ? formatPlainNumber(simHybridReport.pos_weight, 4) : '--'}
+                extra="BCEWithLogitsLoss 类别权重"
+              />
             </div>
 
             {simHybridMetrics.length ? (
@@ -507,6 +523,8 @@ export default function ModelsPage() {
                   <th>Precision</th>
                   <th>Recall</th>
                   <th>F1</th>
+                  <th>最佳阈值</th>
+                  <th>pos_weight</th>
                 </tr>
               </thead>
               <tbody>
@@ -517,6 +535,8 @@ export default function ModelsPage() {
                   <td>{simulationReport?.metrics ? formatPercent(simulationReport.metrics.precision) : '--'}</td>
                   <td>{simulationReport?.metrics ? formatPercent(simulationReport.metrics.recall) : '--'}</td>
                   <td>{simulationReport?.metrics ? formatPercent(simulationReport.metrics.f1) : '--'}</td>
+                  <td>--</td>
+                  <td>--</td>
                 </tr>
                 <tr>
                   <td>{simHybridReport?.model_name || 'Hybrid LSTM'}</td>
@@ -525,6 +545,8 @@ export default function ModelsPage() {
                   <td>{simHybridReport?.metrics ? formatPercent(simHybridReport.metrics.precision) : '--'}</td>
                   <td>{simHybridReport?.metrics ? formatPercent(simHybridReport.metrics.recall) : '--'}</td>
                   <td>{simHybridReport?.metrics ? formatPercent(simHybridReport.metrics.f1) : '--'}</td>
+                  <td>{simHybridReport?.best_threshold != null ? formatPlainNumber(simHybridReport.best_threshold, 2) : '--'}</td>
+                  <td>{simHybridReport?.pos_weight != null ? formatPlainNumber(simHybridReport.pos_weight, 4) : '--'}</td>
                 </tr>
               </tbody>
             </table>
@@ -573,7 +595,11 @@ export default function ModelsPage() {
             <strong> {comparisonWinnerAccuracy} </strong>，
             F1 更优模型为
             <strong> {comparisonWinnerF1} </strong>。
-            若 Hybrid LSTM 出现对某一类别明显偏置，则说明后续仍需进一步优化阈值、损失权重或特征设计。
+            当前 Hybrid LSTM 使用的最佳阈值为
+            <strong> {simHybridReport?.best_threshold != null ? ` ${formatPlainNumber(simHybridReport.best_threshold, 2)} ` : ' -- '} </strong>，
+            训练时使用的 pos_weight 为
+            <strong> {simHybridReport?.pos_weight != null ? ` ${formatPlainNumber(simHybridReport.pos_weight, 4)} ` : ' -- '} </strong>。
+            这表明该模型已经引入阈值扫描与类别权重优化，不再固定使用默认 0.50 阈值。
           </div>
         </div>
       </div>

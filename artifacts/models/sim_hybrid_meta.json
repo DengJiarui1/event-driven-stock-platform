@@ -33,23 +33,44 @@
   "model_config": {
     "seq_input_size": 4,
     "static_input_size": 9,
-    "hidden_size": 32,
-    "static_hidden_size": 16,
-    "fusion_hidden_size": 32,
-    "dropout": 0.1
+    "hidden_size": 12,
+    "static_hidden_size": 8,
+    "fusion_hidden_size": 16,
+    "dropout": 0.2
   },
   "train_config": {
-    "batch_size": 16,
-    "epochs": 80,
-    "learning_rate": 0.001,
-    "weight_decay": 0.0001,
-    "patience": 10,
-    "device": "cuda"
+    "batch_size": 8,
+    "epochs": 90,
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0005,
+    "patience": 20,
+    "device": "cuda",
+    "use_auto_pos_weight": false,
+    "manual_pos_weight": 1.1,
+    "actual_pos_weight": 1.1
+  },
+  "threshold_config": {
+    "threshold_candidates": [
+      0.5,
+      0.51,
+      0.52,
+      0.53,
+      0.54,
+      0.55,
+      0.56,
+      0.57,
+      0.58
+    ],
+    "selection_metric": "balanced_accuracy",
+    "best_threshold": 0.57
   },
   "metrics": {
-    "accuracy": 0.5555555555555556,
-    "precision": 0.5294117647058824,
-    "recall": 1.0,
-    "f1": 0.6923076923076923
+    "accuracy": 0.4444444444444444,
+    "precision": 0.4444444444444444,
+    "recall": 0.4444444444444444,
+    "f1": 0.4444444444444444,
+    "macro_f1": 0.4444444444444444,
+    "balanced_accuracy": 0.4444444444444444,
+    "negative_recall": 0.4444444444444444
   }
 }
