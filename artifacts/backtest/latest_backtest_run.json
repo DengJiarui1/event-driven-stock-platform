@@ -1,0 +1,33 @@
+{
+  "model_name": "simulation_v1",
+  "params": {
+    "initial_cash": 100000.0,
+    "commission": 0.001,
+    "hold_days": 3,
+    "prob_threshold": null,
+    "stop_loss_pct": 0.03,
+    "take_profit_pct": 0.05,
+    "target_percent": 0.95
+  },
+  "artifacts": {
+    "signal_csv": "D:\\bishe\\event-driven-stock-platform\\artifacts\\backtest\\backtest_signals_simulation_v1.csv",
+    "equity_csv": "D:\\bishe\\event-driven-stock-platform\\artifacts\\backtest\\equity_curve_simulation_v1.csv",
+    "drawdown_csv": "D:\\bishe\\event-driven-stock-platform\\artifacts\\backtest\\drawdown_curve_simulation_v1.csv",
+    "trade_csv": "D:\\bishe\\event-driven-stock-platform\\artifacts\\backtest\\trade_log_simulation_v1.csv",
+    "report_json": "D:\\bishe\\event-driven-stock-platform\\artifacts\\backtest\\backtest_report_simulation_v1.json"
+  },
+  "summary": {
+    "initial_cash": 100000.0,
+    "final_value": 107560.71608999999,
+    "total_return": 0.07560716089999987,
+    "annual_return": 0.009502691666065655,
+    "max_drawdown": -0.04235565610495249,
+    "sharpe_ratio": 0.318577968114795,
+    "trade_count": 10,
+    "win_rate": 0.6,
+    "avg_win": 0.02578253909010561,
+    "avg_loss": -0.013460016932289934,
+    "avg_hold_days": 3.7,
+    "profit_factor": 2.2875864011049547
+  }
+}

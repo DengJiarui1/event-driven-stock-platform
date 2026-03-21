@@ -5,6 +5,7 @@ import EventsPage from './pages/EventsPage'
 import PredictionPage from './pages/PredictionPage'
 import ModelsPage from './pages/ModelsPage'
 import InformerPage from './pages/InformerPage'
+import BacktestPage from './pages/BacktestPage'
 
 export default function App() {
   return (
@@ -16,6 +17,8 @@ export default function App() {
         <Route path="prediction" element={<PredictionPage />} />
         <Route path="models" element={<ModelsPage />} />
         <Route path="informer" element={<InformerPage />} />
+        <Route path="backtest" element={<BacktestPage />} />
+        
       </Route>
     </Routes>
   )

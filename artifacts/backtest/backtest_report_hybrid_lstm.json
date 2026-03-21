@@ -1,0 +1,26 @@
+{
+  "model_name": "hybrid_lstm",
+  "strategy_name": "EventPredictionStrategy",
+  "params": {
+    "hold_days": 3,
+    "prob_threshold": null,
+    "stop_loss_pct": 0.03,
+    "take_profit_pct": 0.05,
+    "commission": 0.001,
+    "target_percent": 0.95
+  },
+  "summary": {
+    "initial_cash": 1000000.0,
+    "final_value": 939807.61396,
+    "total_return": -0.06019238604000001,
+    "annual_return": -0.008023346670788856,
+    "max_drawdown": -0.09332000846000003,
+    "sharpe_ratio": -0.21495391600362687,
+    "trade_count": 8,
+    "win_rate": 0.5,
+    "avg_win": 0.012137891705329093,
+    "avg_loss": -0.023652821316112967,
+    "avg_hold_days": 3.875,
+    "profit_factor": 0.37059219770889895
+  }
+}

@@ -1213,3 +1213,18 @@ body {
   line-height: 1.8;
   font-size: 14px;
 }
+
+.backtest-chart {
+  width: 100%;
+  height: 320px;
+}
+
+.backtest-chart {
+  width: 100%;
+  height: 320px;
+}
+
+.backtest-mini-chart {
+  width: 100%;
+  height: 260px;
+}

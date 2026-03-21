@@ -14,6 +14,11 @@ from backend.app.services.predict_service import (
 )
 
 from fastapi.staticfiles import StaticFiles
+from typing import Optional, Literal
+
+from pydantic import BaseModel
+from fastapi import HTTPException, Query
+
 
 from backend.app.services.informer_service import (
     create_job as create_informer_job,
@@ -30,6 +35,15 @@ from backend.app.services.sim_predict_service import (
 
 from backend.app.services.sim_hybrid_predict_service import (
     predict_new_event_simulation_hybrid,
+)
+
+
+from backend.app.services.backtest_service import (
+    get_backtest_drawdown,
+    get_backtest_equity,
+    get_backtest_trades,
+    get_latest_backtest_report,
+    run_backtest_pipeline,
 )
 
 app = FastAPI(
@@ -114,6 +128,17 @@ class SimulatePredictRequest(BaseModel):
     event_title: str
     # model_version: Optional[str] = "simulation_v1"
     model_version: Optional[str] = "hybrid_lstm"         # 默认模型调整
+
+
+class BacktestRunRequest(BaseModel):
+    model_name: Literal["simulation_v1", "hybrid_lstm"] = "simulation_v1"
+    initial_cash: float = 100000.0
+    commission: float = 0.001
+    hold_days: int = 3
+    prob_threshold: Optional[float] = None
+    stop_loss_pct: float = 0.03
+    take_profit_pct: float = 0.05
+    target_percent: float = 0.95
 
 def ensure_file_exists(path: Path):
     if not path.exists():
@@ -754,3 +779,61 @@ def get_sim_hybrid_test_predictions(
         limit=limit,
         only_error=only_error,
     )
+
+
+@app.post("/api/backtest/run")
+def api_run_backtest(payload: BacktestRunRequest):
+    try:
+        return run_backtest_pipeline(
+            model_name=payload.model_name,
+            initial_cash=payload.initial_cash,
+            commission=payload.commission,
+            hold_days=payload.hold_days,
+            prob_threshold=payload.prob_threshold,
+            stop_loss_pct=payload.stop_loss_pct,
+            take_profit_pct=payload.take_profit_pct,
+            target_percent=payload.target_percent,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/api/backtest/latest")
+def api_get_latest_backtest(model_name: Optional[str] = Query(None)):
+    try:
+        return get_latest_backtest_report(model_name=model_name)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/api/backtest/trades")
+def api_get_backtest_trades(
+    model_name: str = Query("simulation_v1"),
+    limit: int = Query(200, ge=1, le=5000),
+):
+    try:
+        return get_backtest_trades(model_name=model_name, limit=limit)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/api/backtest/equity")
+def api_get_backtest_equity(
+    model_name: str = Query("simulation_v1"),
+    limit: int = Query(2000, ge=1, le=20000),
+):
+    try:
+        return get_backtest_equity(model_name=model_name, limit=limit)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/api/backtest/drawdown")
+def api_get_backtest_drawdown(
+    model_name: str = Query("simulation_v1"),
+    limit: int = Query(2000, ge=1, le=20000),
+):
+    try:
+        return get_backtest_drawdown(model_name=model_name, limit=limit)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

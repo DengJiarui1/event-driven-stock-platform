@@ -47,3 +47,26 @@ export const getSimulationTestPredictions = (params = {}) =>
 export const getSimHybridReport = () => http.get('/api/sim-hybrid-report')
 export const getSimHybridTestPredictions = (params = {}) =>
   http.get('/api/sim-hybrid-test-predictions', { params })
+
+export const runBacktest = (payload) =>
+  http.post('/api/backtest/run', payload)
+
+export const getBacktestLatest = (modelName = null) =>
+  http.get('/api/backtest/latest', {
+    params: modelName ? { model_name: modelName } : {}
+  })
+
+export const getBacktestTrades = (modelName = 'simulation_v1', limit = 200) =>
+  http.get('/api/backtest/trades', {
+    params: { model_name: modelName, limit }
+  })
+
+export const getBacktestEquity = (modelName = 'simulation_v1', limit = 2000) =>
+  http.get('/api/backtest/equity', {
+    params: { model_name: modelName, limit }
+  })
+
+export const getBacktestDrawdown = (modelName = 'simulation_v1', limit = 2000) =>
+  http.get('/api/backtest/drawdown', {
+    params: { model_name: modelName, limit }
+  })

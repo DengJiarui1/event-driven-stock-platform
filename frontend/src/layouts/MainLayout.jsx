@@ -5,7 +5,9 @@ const menus = [
   { path: '/events', label: '事件分析' },
   { path: '/prediction', label: '预测结果' },
   { path: '/models', label: '模型对比' },
-  { path: '/informer', label: 'Informer实验' }
+  { path: '/backtest', label: '策略回测' },
+  { path: '/informer', label: 'Informer实验' },
+  
 ]
 
 export default function MainLayout() {
